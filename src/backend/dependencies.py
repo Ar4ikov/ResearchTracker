@@ -10,3 +10,5 @@ engine = {
         environ.get('DATABASE_URL'), connect_args={"check_same_thread": False}
     ),
 }[True]
+
+print(engine)
