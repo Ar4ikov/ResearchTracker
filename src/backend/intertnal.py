@@ -1,4 +1,5 @@
 from datetime import datetime
+from http.client import HTTPException
 
 from pydantic import BaseModel, validator
 from typing import Optional
@@ -11,6 +12,10 @@ class UserScoreRequest(BaseModel):
     score: int
     user_id: int
     team_id: int
+
+
+class UserScorePatch(BaseModel):
+    score: int | None = None
 
 
 class UserScoreResponse(UserScoreRequest):
@@ -45,16 +50,30 @@ class UserResponseWithTeam(UserResponse):
     teams: list[TeamResponse] | None = []
 
 
+class UserResponseWithTeamAndScores(UserResponseWithTeam, UserResponseWithScores):
+    ...
+
+
 class TeamResponseWithUsers(TeamResponse):
     users: list[UserResponseWithScores] | None = []
 
 
 class UserScoreResponseWithTeamAndUser(UserScoreResponse):
-    user: UserResponseWithScores
-    team: TeamResponse
+    user: UserResponse | None = None
+    team: TeamResponse | None = None
 
 
-class UserSecure(UserRequest):
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+
+class TokenData(BaseModel):
+    user_id: int | None = None
+    username: str | None = None
+
+
+class UserSecureRequest(UserRequest):
     username: str
     password: str
 
@@ -69,3 +88,11 @@ class UserSecure(UserRequest):
         if not fullmatch(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$", v):
             raise ValueError("Password must be latin letters and numbers")
         return v
+
+
+class UserSecureResponse(UserResponse):
+    username: str | None = None
+
+
+class Stage(BaseModel):
+    stage: int

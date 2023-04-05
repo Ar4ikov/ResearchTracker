@@ -14,7 +14,6 @@ import {
   SimpleCell, Input, FormItem, Button, FormLayout,
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
-import {MainPage} from './main';
 
 const AuthForm = () => {
   const [login, setLogin] = React.useState('');
@@ -26,7 +25,7 @@ const AuthForm = () => {
     // check email by regex
     const isEmail = (email) => {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(String(email).toLowerCase());
+        return email === '' ? true : re.test(String(email).toLowerCase());
     }
 
     const setStateAction = {
@@ -54,8 +53,11 @@ const AuthForm = () => {
       <PanelHeader>Авторизация</PanelHeader>
         <Group>
           <FormLayout>
-            <FormItem top="Логин">
-              <Input type="login" name="login" placeholder="Введите логин" />
+            <FormItem top="Логин"
+                status={login ? 'valid' : 'error'}
+                bottom={login ? 'соси хуй сука' : 'Введите корректный email'}
+            >
+              <Input type="login" name="login" placeholder="Введите логин" onChange={onChange} />
             </FormItem>
 
             <FormItem top="Пароль">
@@ -87,19 +89,4 @@ ReactDOM.render(
     </AdaptivityProvider>
   </ConfigProvider>,
   document.getElementById('root'),
-);
-
-ReactDOM.render(
-    <ConfigProvider platform="vkcom" appearance="light">
-        <AdaptivityProvider>
-            <AppRoot>
-                <SplitLayout style={{marginTop: 150}}>
-                    <SplitCol spaced={true}>
-                        <MainPage />
-                    </SplitCol>
-                </SplitLayout>
-            </AppRoot>
-        </AdaptivityProvider>
-    </ConfigProvider>,
-    document.getElementById('main'),
 );

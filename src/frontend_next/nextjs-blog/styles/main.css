@@ -1,0 +1,78 @@
+/* create a child of circle with 360 / n degree part
+ n is number of child
+ child has a text elements, that can be placed in the center of each child
+ */
+.circle {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #f1f1f1;
+  margin: 0 auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.circle::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+
+.circle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  transform: rotate(45deg);
+}
+
+.circle span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.circle span:nth-child(1) {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.circle span:nth-child(2) {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.circle span:nth-child(3) {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.circle span:nth-child(4) {
+  transform: translate(-50%, -50%) rotate(135deg);
+}
+
+.circle span:nth-child(5) {
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.circle span:nth-child(6) {
+  transform: translate(-50%, -50%) rotate(225deg);
+}
+
+.circle span:nth-child(7) {
+  transform: translate(-50%, -50%) rotate(270deg);
+}
+
+.circle span:nth-child(8) {
+  transform: translate(-50%, -50%) rotate(315deg);
+}

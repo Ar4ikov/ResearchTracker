@@ -1,0 +1,73 @@
+.circle {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: #f1f1f1;
+  margin: 50px auto;
+  color: #1a761c;
+}
+
+.circle::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+}
+
+.circle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  transform: rotate(45deg);
+}
+
+.circle li {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.circle li:nth-child(1) {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.circle li:nth-child(2) {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.circle li:nth-child(3) {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.circle li:nth-child(4) {
+  transform: translate(-50%, -50%) rotate(135deg);
+}
+
+.circle li:nth-child(5) {
+  transform: translate(-50%, -50%) rotate(180deg);
+}
+
+.circle li:nth-child(6) {
+  transform: translate(-50%, -50%) rotate(225deg);
+}
+
+.circle li:nth-child(7) {
+  transform: translate(-50%, -50%) rotate(270deg);
+}
+
+.circle li:nth-child(8) {
+  transform: translate(-50%, -50%) rotate(315deg);
+}
