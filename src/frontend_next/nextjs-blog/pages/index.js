@@ -269,7 +269,7 @@ export default function Home() {
                                                 fontSize: "1rem"
                                             }}>
                                                 <Div>
-                                                    <p>Ваша оценка</p>
+                                                    <p>Вы выбрали</p>
                                                     <p style={{ fontSize: "4rem", marginTop: -20}}>{score}</p>
                                                 </Div>
                                             </Card>
