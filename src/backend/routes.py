@@ -317,12 +317,12 @@ def create_score(score: UserScoreRequest):
 
         if len(scores_) > 0:
             # check timedelta between last score and new score < 10 min
-            if (datetime.now() - scores_[-1].date_create).total_seconds() < 600:
+            if (datetime.now() - scores_[-1].date_create).total_seconds() < 60:
                 raise HTTPException(
                     status_code=409,
                     detail={
-                        "message": "Вы можете отправлять результаты не чаще чем раз в 10 минут",
-                        "estimated_time": 600 - (datetime.now() - scores_[-1].date_create).total_seconds()
+                        "message": "Вы можете отправлять результаты не чаще чем раз в 1 минуту",
+                        "estimated_time": 60 - (datetime.now() - scores_[-1].date_create).total_seconds()
                     })
 
         score_create = UserScore.from_orm(score)

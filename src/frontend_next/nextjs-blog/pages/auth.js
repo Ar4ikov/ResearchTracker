@@ -16,6 +16,8 @@ import React, {useEffect} from "react";
 import {Icon28ErrorCircleOutline} from "@vkontakte/icons";
 
 export default function Auth() {
+    const hostname = 'http://85.21.8.81:8000';
+
     const [login, setLogin] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [text, setText] = React.useState('');
@@ -78,7 +80,7 @@ export default function Auth() {
 
         console.log(formBody);
 
-        fetch('http://85.21.8.81:8000/api/v1/login', {
+        fetch(hostname + '/api/v1/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

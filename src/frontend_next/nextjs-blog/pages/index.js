@@ -24,7 +24,7 @@ import {
     Card,
     Spacing,
     Gradient,
-    Snackbar,
+    Snackbar, Slider,
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import {Icon28CheckCircleOutline, Icon28ErrorCircleOutline} from "@vkontakte/icons";
@@ -37,6 +37,8 @@ export default function Home() {
     //   )
     // }
 
+    const hostname = 'http://85.21.8.81:8000';
+
     const [snackbar, setSnackbar] = React.useState(null);
     const [user, setUser] = React.useState({});
     const [access_token, setToken] = React.useState('');
@@ -44,6 +46,9 @@ export default function Home() {
     const [team, setTeam] = React.useState(null);
     const [stage, setStage] = React.useState(null);
     const [_time, setTime] = React.useState(null);
+    let [estTime, setEstTime] = React.useState(0);
+    const [score, setScore] = React.useState(0);
+    const [submitLoading, setSubmitLoading] = React.useState(false);
 
     const secondsToHms = (d) => {
         d = Number(d);
@@ -65,7 +70,7 @@ export default function Home() {
 
     // create async function to calculate estimated time
     const setTimer = async (time) => {
-        setTime(time);
+        setTime(true);
         const timer = setInterval(() => {
             if (time <= 0) {
                 setTime(null);
@@ -88,13 +93,15 @@ export default function Home() {
         );
     };
 
-    const onSubmit = (buttonId) => {
+    const onSubmit = () => {
         if (!team) {
             openError("Выберите команду!");
             return;
         }
 
-        fetch('http://85.21.8.81:8000/api/v1/team/' + team + '/join/' + String(user.id), {
+        setSubmitLoading(true);
+
+        fetch(hostname + '/api/v1/team/' + team + '/join/' + String(user.id), {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -102,7 +109,7 @@ export default function Home() {
             }
         }).then(r => r.json());
 
-        fetch('http://85.21.8.81:8000/api/v1/score', {
+        fetch(hostname + '/api/v1/score', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -110,12 +117,13 @@ export default function Home() {
             },
             body: JSON.stringify({
                 team_id: Number(team),
-                score: Number(buttonId),
+                score: Number(score),
                 user_id: user.id
             })
         })
             .then(response => response.json())
             .then(data => {
+                setSubmitLoading(false);
                 if (data.detail) {
                     openError(
                         data.detail.message +
@@ -124,13 +132,18 @@ export default function Home() {
                     );
 
                     if (_time == null) {
+                        setEstTime(Number(data.detail.estimated_time));
                         setTimer(data.detail.estimated_time).then(r => r);
+                    }
+                    else {
+                        setEstTime(data.detail.estimated_time);
                     }
                 } else {
                     openSuccess("Ответ принят!");
 
                     if (_time == null) {
-                        setTimer(600).then(r => r);
+                        setEstTime(60);
+                        setTimer(60).then(r => r);
                     }
                 }
             })
@@ -145,7 +158,7 @@ export default function Home() {
         setToken(sessionStorage.getItem('access_token'));
         getTeams();
 
-        fetch('http://85.21.8.81:8000/api/v1/users/me', {
+        fetch(hostname + '/api/v1/users/me', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -166,7 +179,7 @@ export default function Home() {
     }, []);
 
     const getTeams = () => {
-        fetch('http://85.21.8.81:8000/api/v1/stage', {
+        fetch(hostname + '/api/v1/stage', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -178,7 +191,7 @@ export default function Home() {
                 console.log(data.stage);
                 return data.stage
             }).then(_stage => {
-            fetch('http://85.21.8.81:8000/api/v1/teams/' + _stage, {
+            fetch(hostname + '/api/v1/teams/' + _stage, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -208,8 +221,7 @@ export default function Home() {
                                         <Div>
                                             <p>Пришло время узнать, насколько вы чувствуете <b>сплоченность</b> с
                                                 командой.</p>
-                                            <p>Выберите на круге тот участок, который наиболее описывает
-                                                вашу <b>сплоченность</b> с командой.</p>
+                                            <p>Используйте слайдер ниже, чтобы выбрать вашу <b>сплоченность</b> с командой.</p>
                                         </Div>
                                         <FormItem top={team ? "Команда " + team : "Команда не выбрана"}>
                                             <Select
@@ -223,26 +235,64 @@ export default function Home() {
                                             />
                                         </FormItem>
                                         {_time && <Div id={"timer"}></Div>}
-                                        <Spacing size={16}/>
-                                        <CardGrid size="m">
-                                            {Array.from({length: 8}).map((_, i) => (
-                                                <Card id={String(7 - i)} key={7 - i}
-                                                      style={{
-                                                          paddingTop: 5,
-                                                          paddingBottom: 5,
-                                                          background: 'rgb(38,136,235)',
-                                                      }}
-                                                      onClick={() => onSubmit(7 - i)}
-                                                >
-                                                    <Div style={{
-                                                        textAlign: 'center',
-                                                        color: 'white',
-                                                    }}>
-                                                        {7 - i}
-                                                    </Div>
+                                        <FormItem>
+                                            <CardGrid size="m" style={{ marginTop: -20 }}>
+                                                <Card style={{background: "#fff", fontSize: "1.5rem"}}>
+                                                    <p>0 😡</p>
                                                 </Card>
-                                            ))}
+                                                <Card style={{
+                                                    textAlign: "right",
+                                                    background: "#fff",
+                                                    fontSize: "1.5rem"
+                                                }}>
+                                                    <p>7 🤗</p>
+                                                </Card>
+                                            </CardGrid>
+                                            <Slider min={0} max={7} value={Number(score)} step={1} onChange={setScore}/>
+                                        </FormItem>
+                                        <Spacing size={16}/>
+                                        <Button
+                                            size={"l"}
+                                            stretched={true}
+                                            align={"center"}
+                                            sizeY={"compact"}
+                                            loading={submitLoading}
+                                            onClick={() => onSubmit()}
+                                        >
+                                            Отправить
+                                        </Button>
+                                        <Spacing size={16}/>
+                                        <CardGrid size="l">
+                                            <Card size={"l"} style={{
+                                                background: "#fff",
+                                                textAlign: "center",
+                                                fontSize: "1rem"
+                                            }}>
+                                                <Div>
+                                                    <p>Ваша оценка</p>
+                                                    <p style={{ fontSize: "4rem", marginTop: -20}}>{score}</p>
+                                                </Div>
+                                            </Card>
                                         </CardGrid>
+                                        {/*<CardGrid size="m">*/}
+                                        {/*    {Array.from({length: 8}).map((_, i) => (*/}
+                                        {/*        <Card id={String(7 - i)} key={7 - i}*/}
+                                        {/*              style={{*/}
+                                        {/*                  paddingTop: 5,*/}
+                                        {/*                  paddingBottom: 5,*/}
+                                        {/*                  background: 'rgb(38,136,235)',*/}
+                                        {/*              }}*/}
+                                        {/*              onClick={() => onSubmit(7 - i)}*/}
+                                        {/*        >*/}
+                                        {/*            <Div style={{*/}
+                                        {/*                textAlign: 'center',*/}
+                                        {/*                color: 'white',*/}
+                                        {/*            }}>*/}
+                                        {/*                {7 - i}*/}
+                                        {/*            </Div>*/}
+                                        {/*        </Card>*/}
+                                        {/*    ))}*/}
+                                        {/*</CardGrid>*/}
                                     </Group>
                                     {snackbar}
                                 </Panel>
