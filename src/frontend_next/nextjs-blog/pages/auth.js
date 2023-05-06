@@ -137,7 +137,9 @@ export default function Auth() {
                                 <Panel id="login">
                                     <PanelHeader>Авторизация</PanelHeader>
                                     <Group>
-                                        <Header mode="primary">Бога ради, не вводите здесь свои данные от VK.</Header>
+                                        <Header mode="primary" multiline>
+                                            Бога ради, не вводите здесь свои данные от ВК 🙏🏻
+                                        </Header>
                                         <FormLayout>
                                             <FormItem top="Логин">
                                                 <Input type="login" name="login" placeholder="Введите логин"
