@@ -14,9 +14,12 @@ import {
 import '@vkontakte/vkui/dist/vkui.css';
 import React, {useEffect} from "react";
 import {Icon28ErrorCircleOutline} from "@vkontakte/icons";
+import 'dotenv/config';
 
 export default function Auth() {
-    const hostname = 'http://85.21.8.81:8000';
+     require('dotenv').config();
+
+    const hostname = process.env.HOSTNAME;
 
     const [login, setLogin] = React.useState('');
     const [password, setPassword] = React.useState('');
