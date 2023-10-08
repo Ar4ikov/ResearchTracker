@@ -4,7 +4,7 @@ WORKDIR /app
 COPY requirements.txt .
 COPY . .
 
-RUN sudo apt update && sudo apt upgrade -y
+RUN apt update && apt upgrade -y
 RUN pip install -r requirements.txt
 
 # Run python 3.10 container
