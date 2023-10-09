@@ -14,7 +14,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgres://research_user:research_password@db:5432/rdb
+      - DATABASE_URL=postgresql://research_user:research_password@db:5432/rdb
     depends_on:
       - db
     networks:
