@@ -28,7 +28,6 @@ import {
 } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import {Icon28CheckCircleOutline, Icon28ErrorCircleOutline} from "@vkontakte/icons";
-import 'dotenv/config';
 
 export default function Home() {
     // if (!checkAuth()) {
@@ -38,9 +37,7 @@ export default function Home() {
     //   )
     // }
 
-    require('dotenv').config();
-
-    const hostname = process.env.HOSTNAME;
+    const hostname = 'http://51.250.79.247:8000';
 
     const [snackbar, setSnackbar] = React.useState(null);
     const [user, setUser] = React.useState({});
