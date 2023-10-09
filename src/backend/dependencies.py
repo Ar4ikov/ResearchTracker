@@ -12,7 +12,7 @@ from src.backend.intertnal import TokenData
 
 # case with postgresql, mysql, sqlite
 engine = {
-    environ.get('DATABASE_URL').startswith("postgres"): create_engine(environ.get('DATABASE_URL')),
+    environ.get('DATABASE_URL').startswith("postgresql"): create_engine(environ.get('DATABASE_URL')),
     environ.get('DATABASE_URL').startswith("mysql"): create_engine(environ.get('DATABASE_URL')),
     environ.get('DATABASE_URL').startswith("sqlite"): create_engine(
         environ.get('DATABASE_URL'), connect_args={"check_same_thread": False}
